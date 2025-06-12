@@ -25,7 +25,7 @@ export function InputForm({ onAnalyze, isLoading }: InputFormProps) {
   const [funcLatex, setFuncLatex] = useState("x^2");
   const [funcText, setFuncText] = useState("x^2");
   const [a, setA] = useState(0);
-  const [b, setB] = useState(1);
+  const [b, setB] = useState(0);
   const [n, setN] = useState(4);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -51,7 +51,6 @@ export function InputForm({ onAnalyze, isLoading }: InputFormProps) {
     if (newN !== undefined) setN(newN);
   };
 
-  // Initialize with default values
   useEffect(() => {
     handleMathChange("x^2", "x^2");
   }, []);
@@ -124,7 +123,7 @@ export function InputForm({ onAnalyze, isLoading }: InputFormProps) {
                 type="number"
                 step="any"
                 value={b}
-                onChange={(e) => setB(Number.parseFloat(e.target.value) || 1)}
+                onChange={(e) => setB(Number.parseFloat(e.target.value) || 0)}
                 className="bg-slate-700/50 border-slate-600 text-slate-100 focus:border-blue-400"
                 required
               />
@@ -146,17 +145,17 @@ export function InputForm({ onAnalyze, isLoading }: InputFormProps) {
               required
             />
             <p className="text-xs text-slate-500">
-              Higher values provide more accuracy but take longer to compute
+              Valores más altos proporcionan mayor precisión pero tardan más en
+              calcularse
             </p>
           </div>
 
-          {/* Integration Preview */}
+          {/* Vista previa de la Integración */}
           {funcLatex && (
             <div className="bg-white rounded p-3 text-center">
               <MathDisplay
                 latex={`\\int_{${a}}^{${b}} ${funcLatex} \\, dx`}
                 className="text-lg"
-                block={true}
               />
             </div>
           )}

@@ -1,3 +1,25 @@
+# Python related
 ATNBack/__pycache__/
 ATNBack/.venv/
+ATNBack/*.pyc
+ATNBack/.pytest_cache/
+ATNBack/.coverage
+
+# Node.js related
 ATNFront/node_modules/
+ATNFront/dist/
+ATNFront/.cache/
+ATNFront/coverage/
+
+# Environment configuration
+.env
+.venv
+env/
+venv/
+ENV/
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo

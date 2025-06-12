@@ -4,11 +4,12 @@ import {
   Award,
   BarChart,
   Calculator,
+  Eye,
   Info,
   TrendingUp,
   Zap,
 } from "lucide-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   CartesianGrid,
   Legend,
@@ -165,6 +166,11 @@ export function ResultsDisplay({ data }: ResultsDisplayProps) {
     return "";
   };
 
+  const getMethodColorByIndex = (index: number): string => {
+    if (index < 0) return "#6b7280"; // Color por defecto si no se encuentra
+    return methodColors[index % methodColors.length];
+  };
+
   // Create a mapping of dataKey to method name for tooltips
   const methodNameMap: Record<string, string> = {};
 
@@ -225,6 +231,20 @@ export function ResultsDisplay({ data }: ResultsDisplayProps) {
   );
 
   const derivativeLatex = convertTextToLatex(data.derivative_info.expression);
+
+  const [selectedMethodForSingleView, setSelectedMethodForSingleView] =
+    useState<string>(data.results[0]?.method_name || "");
+
+  const singleApproximationPlotData = useMemo(() => {
+    const result = data.results.find(
+      (r) => r.method_name === selectedMethodForSingleView
+    );
+    if (!result) return [];
+    return result.points.map((p, i) => ({
+      x: p,
+      Aproximación: result.values[i],
+    }));
+  }, [data.results, selectedMethodForSingleView]);
 
   return (
     <div className="space-y-6">
@@ -369,6 +389,78 @@ export function ResultsDisplay({ data }: ResultsDisplayProps) {
                         name={`Aprox. (${plot.name})`}
                       />
                     ))}
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-slate-800/30 border-slate-700">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-slate-100 text-lg flex items-center gap-2">
+                <Eye className="h-5 w-5 text-green-400" />
+                Análisis Individual por Método
+              </CardTitle>
+              <CardDescription className="text-slate-400">
+                Selecciona un método para analizar su aproximación en detalle.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-slate-300 mb-1">
+                  Visualizar método:
+                </label>
+                <select
+                  value={selectedMethodForSingleView}
+                  onChange={(e) =>
+                    setSelectedMethodForSingleView(e.target.value)
+                  }
+                  className="w-full border-slate-700 rounded-md p-2"
+                >
+                  {data.results.map((res) => (
+                    <option key={res.method_name} value={res.method_name}>
+                      {res.method_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="h-[400px] w-full">
+                <ResponsiveContainer>
+                  <LineChart
+                    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                    <XAxis
+                      type="number"
+                      dataKey="x"
+                      domain={["dataMin", "dataMax"]}
+                      stroke="#9ca3af"
+                      fontSize={12}
+                    />
+                    <YAxis stroke="#9ca3af" fontSize={12} />
+
+                    <Legend />
+                    <Line
+                      data={functionPlotData}
+                      type="monotone"
+                      dataKey="Función Original"
+                      stroke="#6b7280"
+                      strokeWidth={2}
+                      dot={false}
+                    />
+                    <Line
+                      data={singleApproximationPlotData}
+                      type="linear"
+                      dataKey="Aproximación"
+                      stroke={getMethodColorByIndex(
+                        data.results.findIndex(
+                          (r) => r.method_name === selectedMethodForSingleView
+                        )
+                      )}
+                      strokeWidth={2}
+                      dot={{ r: 4 }}
+                      name={`Aprox. (${selectedMethodForSingleView})`}
+                    />
                   </LineChart>
                 </ResponsiveContainer>
               </div>

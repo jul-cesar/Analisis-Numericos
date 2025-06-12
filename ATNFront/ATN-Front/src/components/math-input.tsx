@@ -134,13 +134,6 @@ export function MathInput({
       b: 1,
       n: 20,
     },
-    {
-      text: "abs(x - 1)",
-      label: "Valor Absoluto (Esquina aguda)",
-      a: 0,
-      b: 2,
-      n: 40,
-    },
   ];
   // Convert text to LaTeX for display
   const convertTextToLatex = useCallback((text: string): string => {

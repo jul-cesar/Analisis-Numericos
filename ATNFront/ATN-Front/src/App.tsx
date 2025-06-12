@@ -1,14 +1,17 @@
-
-
-
-
 import { Calculator, Loader2, TrendingUp } from "lucide-react";
 import { useState } from "react";
-import type { AnalysisResponse } from "./types/types";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./components/ui/card";
+import AboutUs from "./components/AboutUs";
 import { InputForm } from "./components/InputForm";
-import { Alert, AlertDescription } from "./components/ui/alert";
 import { ResultsDisplay } from "./components/ResultsDisplay";
+import { Alert, AlertDescription } from "./components/ui/alert";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./components/ui/card";
+import type { AnalysisResponse } from "./types/types";
 
 export default function Home() {
   const [analysisData, setAnalysisData] = useState<AnalysisResponse | null>(
@@ -134,6 +137,11 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <footer className="bg-slate-800/50 border-t border-slate-700 mt-12 py-6">
+        <div className="container mx-auto text-center text-slate-400">
+          <AboutUs />
+        </div>
+      </footer>
     </div>
   );
 }
