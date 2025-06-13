@@ -1,0 +1,22 @@
+# ... (en la raíz del proyecto)
+version: "3.8"
+
+services:
+  api:
+    # ... (sin cambios en el backend)
+    container_name: atn-api
+    build: ./ATNBack
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    volumes:
+      - ./ATNBack:/app
+    ports:
+      - "8000:8000"
+
+  client:
+    container_name: atn-client
+    # ¡CAMBIO IMPORTANTE! El contexto de build ahora es la carpeta del proyecto React.
+    build: ./ATNFront/ATN-Front
+    ports:
+      - "8080:80"
+    depends_on:
+      - api

@@ -44,27 +44,6 @@ interface ResultsDisplayProps {
   data: AnalysisResponse;
 }
 
-// Custom tooltip component
-const CustomTooltip = ({ active, payload, label, methodNames }: any) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-slate-800 border border-slate-600 rounded-lg p-3 shadow-lg">
-        <p className="text-slate-200 font-medium">{`x = ${label}`}</p>
-        {payload.map((entry: any, index: number) => {
-          // Get method name from our mapping
-          const methodName = methodNames[entry.dataKey] || entry.dataKey;
-          return (
-            <p key={index} style={{ color: entry.color }} className="text-sm">
-              {`${methodName}: ${Number(entry.value).toFixed(4)}`}
-            </p>
-          );
-        })}
-      </div>
-    );
-  }
-  return null;
-};
-
 export function ResultsDisplay({ data }: ResultsDisplayProps) {
   const formatNumber = (num: number) => {
     if (Math.abs(num) < 0.0001) return num.toExponential(4);
@@ -170,9 +149,6 @@ export function ResultsDisplay({ data }: ResultsDisplayProps) {
     if (index < 0) return "#6b7280"; // Color por defecto si no se encuentra
     return methodColors[index % methodColors.length];
   };
-
-  // Create a mapping of dataKey to method name for tooltips
-  const methodNameMap: Record<string, string> = {};
 
   const functionPlotData = useMemo(
     () =>
